@@ -86,6 +86,10 @@
 <input type="button" id="vid2sub" value="Mix"/>
 <br />
 <br />
+<input type="button" id="generateUrl" value="Create url"/> <div id="shareUrl"></div>
+<br />
+<br />
+
 
 <iframe width="420" height="315" id="shade" src="https://www.youtube.com/embed/ekeq4szDmJo?autoplay=1">
 </iframe>
@@ -156,6 +160,94 @@
 	iframe.src = q;
   })
 
+    $("#generateUrl").click( function () {
+      generateShareUrl();
+    })
+
+
+  function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+  };
+
+  function escapeHtml(str) {
+    if (str){
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+  else {
+    return null;
+  }
+}  
+
+var v1 = escapeHtml(getUrlParameter("v1"));
+var v2 = escapeHtml(getUrlParameter("v2"));
+var op1 = escapeHtml(getUrlParameter("op1"));
+var op2 = escapeHtml(getUrlParameter("op2"));
+var comp1 = escapeHtml(getUrlParameter("comp1"));
+var comp2 = escapeHtml(getUrlParameter("comp2"));
+console.log(v1);
+
+
+if (v1) {
+    var embed_url = embed_url_template;
+    var vid_id = v1;
+    var q = embed_url.supplant({id: vid_id});
+    var iframe = document.getElementById("shade");
+    iframe.src = q;
+  }
+
+if (v2) {
+    var embed_url = embed_url_template;
+    var vid_id = v2;
+    var q = embed_url.supplant({id: vid_id});
+    var iframe = document.getElementById("shade1");
+    iframe.src = q;
+  }
+
+  if (op1) {
+    $("#shade").css("opacity", op1);
+  }
+
+  if (op2) {
+    $("#shade1").css("opacity", op2);
+  }
+
+  if (comp1) {
+    $("#shade").css("mix-blend-mode", comp1);
+  }
+
+  if (comp2) {
+    $("#shade").css("mix-blend-mode", comp2);
+  }
+
+function generateShareUrl(){
+  var s_v1 = get_youtube_id($("#vid1").attr("value"));
+  var s_v2 = get_youtube_id($("#vid2").attr("value"));
+  var s_o1 = $("#shade").css("opacity");
+  var s_o2 = $("#shade1").css("opacity");
+  var s_c1 = $("#shade").css("mix-blend-mode");
+  var s_c2 = $("#shade1").css("mix-blend-mode");
+
+  var current_url = window.location.href 
+  console.log(current_url);
+
+  var share_params = "?v1="+s_v1+"&v2="+s_v2+"&op1="+s_o1+"&op2="+s_o2+"&comp1="+s_c1+"&comp2="+s_c2;
+  var share_url = current_url+share_params;
+  console.log(share_url);
+  $("#shareUrl").append(share_url);
+  }
 
   </script>
 </body>
