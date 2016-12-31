@@ -233,6 +233,7 @@ if (v2) {
   }
 
 function generateShareUrl(){
+  $("#shareUrl").empty();
   var s_v1 = get_youtube_id($("#vid1").attr("value"));
   var s_v2 = get_youtube_id($("#vid2").attr("value"));
   var s_o1 = $("#shade").css("opacity");
