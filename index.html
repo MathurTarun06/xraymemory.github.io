@@ -1,49 +1,50 @@
 <html>
+
 <head>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<script>
-  function updateTextInput(val, element) {
-    var normalized = val / 100.0;
-    $(element).css("opacity", normalized);
-  }
+    <script>
+        function updateTextInput(val, element) {
+            var normalized = val / 100.0;
+            $(element).css("opacity", normalized);
+        }
 
-  function changevid(val, element) {
-  	$(element).attr("src", $(val).value);
-  	return false;
-  }
+        function changevid(val, element) {
+            $(element).attr("src", $(val).value);
+            return false;
+        }
+    </script>
 
-</script>
-
-<style>
-#shade {
-  background-color: red;
-  opacity: 0.88;
-  mix-blend-mode: multiply;
-  position: absolute;
-  left: 5px;
-  z-index: 100;
-  width: 100%;
-  height: 100%;
-}
-
-#shade1 {
-  opacity: 0.88;
-  mix-blend-mode: multiply;
-  position: absolute;
-  left: 5px;
-    width: 100%;
-  height: 100%;
-  z-index: -100;
-}
-</style>
+    <style>
+        #shade {
+            background-color: red;
+            opacity: 0.88;
+            mix-blend-mode: multiply;
+            position: absolute;
+            left: 5px;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #shade1 {
+            opacity: 0.88;
+            mix-blend-mode: multiply;
+            position: absolute;
+            left: 5px;
+            width: 100%;
+            height: 100%;
+            z-index: -100;
+        }
+    </style>
 </head>
+
 <body>
-<br>
-<input type="range" name="rangeInput" min="0" max="100" oninput="updateTextInput(this.value, '#shade');" default="80"> 
-<input type="text" id="vid1" value="https://www.youtube.com/watch?v=ekeq4szDmJo" />
-<select id="compmode1">
+    <br>
+    <input type="range" name="rangeInput" min="0" max="100" oninput="updateTextInput(this.value, '#shade');" default="80">
+    <input type="text" id="vid1" value="https://www.youtube.com/watch?v=ekeq4szDmJo" />
+    <select id="compmode1">
   <option value="difference">difference</option>
   <option value="multiply">multiply</option>
   <option value="screen">screen</option>
@@ -60,13 +61,13 @@
   <option value="color">color</option>
   <option value="luminosity">luminosity</option>
 </select>
-<input type="button" id="vid1sub" value="Mix"/>
+    <input type="button" id="vid1sub" value="Mix" />
 
-<br>
-<br />
-<input type="range" name="rangeInput" min="0" max="100" oninput="updateTextInput(this.value, '#shade1');" default="80"> 
-<input type="text" id="vid2" value="https://www.youtube.com/watch?v=UTtfVOyVsf0" />
-<select id="compmode2">
+    <br>
+    <br />
+    <input type="range" name="rangeInput" min="0" max="100" oninput="updateTextInput(this.value, '#shade1');" default="80">
+    <input type="text" id="vid2" value="https://www.youtube.com/watch?v=UTtfVOyVsf0" />
+    <select id="compmode2">
   <option value="difference">difference</option>
   <option value="multiply">multiply</option>
   <option value="screen">screen</option>
@@ -83,173 +84,179 @@
   <option value="color">color</option>
   <option value="luminosity">luminosity</option>
 </select>
-<input type="button" id="vid2sub" value="Mix"/>
-<br />
-<br />
-<input type="button" id="generateUrl" value="Create url"/> <div id="shareUrl"></div>
-<br />
-<br />
+    <input type="button" id="vid2sub" value="Mix" />
+    <br />
+    <br />
+    <input type="button" id="generateUrl" value="Create url" />
+    <div id="shareUrl"></div>
+    <br />
+    <br />
 
 
-<iframe width="420" height="315" id="shade" src="https://www.youtube.com/embed/ekeq4szDmJo?autoplay=1">
+    <iframe width="420" height="315" id="shade" src="https://www.youtube.com/embed/ekeq4szDmJo?autoplay=1">
 </iframe>
-<iframe width="420" height="315" id="shade1" src="https://www.youtube.com/embed/UTtfVOyVsf0?autoplay=1" >
+    <iframe width="420" height="315" id="shade1" src="https://www.youtube.com/embed/UTtfVOyVsf0?autoplay=1">
 </iframe>
-<script>
+    <script>
+        String.prototype.supplant = function(o) {
+            return this.replace(/{([^{}]*)}/g,
+                function(a, b) {
+                    var r = o[b];
+                    return typeof r === 'string' || typeof r === 'number' ? r : a;
+                }
+            );
+        };
 
 
-  String.prototype.supplant = function (o) {
-    return this.replace(/{([^{}]*)}/g,
-        function (a, b) {
-            var r = o[b];
-            return typeof r === 'string' || typeof r === 'number' ? r : a;
+        // update text continously 
+        $('#vid1').on('input', function(e) {
+            var q = $(this).val();
+            $("#vid1").attr("value", q);
+        })
+
+        $('#vid2').on('input', function(e) {
+            var q = $(this).val();
+            $("#vid2").attr("value", q);
+        })
+
+        $('#compmode1').on('input', function(e) {
+            var comp = $(this).val();
+            $("#shade").css("mix-blend-mode", comp);
+
+        })
+
+        $('#compmode2').on('input', function(e) {
+            var comp = $(this).val();
+            $("#shade1").css("mix-blend-mode", comp);
+
+        })
+
+        // update video based on input test
+
+        var embed_url_template = "https://www.youtube.com/embed/{id}?autoplay=1"
+
+        function get_youtube_id(youtube_url) {
+            var video_id = youtube_url.split('v=')[1];
+            var ampersandPosition = video_id.indexOf('&');
+            if (ampersandPosition != -1) {
+                video_id = video_id.substring(0, ampersandPosition);
+            }
+            return video_id;
         }
-    );
-};
+
+        $("#vid1sub").click(function() {
+            var embed_url = embed_url_template;
+            var vid_id = get_youtube_id($("#vid1").attr("value"));
+            var q = embed_url.supplant({
+                id: vid_id
+            });
+            var iframe = document.getElementById("shade");
+            iframe.src = q;
+        })
+
+        $("#vid2sub").click(function() {
+            var embed_url = embed_url_template;
+            var vid_id = get_youtube_id($("#vid2").attr("value"));
+            var q = embed_url.supplant({
+                id: vid_id
+            });
+            var iframe = document.getElementById("shade1");
+            iframe.src = q;
+        })
+
+        $("#generateUrl").click(function() {
+            generateShareUrl();
+        })
 
 
-	// update text continously 
-	$('#vid1').on('input', function(e) {
-		var q = $(this).val();
-		$("#vid1").attr("value", q);
-	})
+        function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
 
-		$('#vid2').on('input', function(e) {
-		var q = $(this).val();
-		$("#vid2").attr("value", q);
-	})
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
 
-	$('#compmode1').on('input', function(e) {
-		var comp = $(this).val();
-		$("#shade").css("mix-blend-mode", comp);
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
 
-	})
-
-	$('#compmode2').on('input', function(e) {
-		var comp = $(this).val();
-		$("#shade1").css("mix-blend-mode", comp);
-
-	})
-
-  // update video based on input test
-
-  var embed_url_template = "https://www.youtube.com/embed/{id}?autoplay=1"
-
-  function get_youtube_id(youtube_url) {
-    var video_id = youtube_url.split('v=')[1];
-	  var ampersandPosition = video_id.indexOf('&');
-	  if(ampersandPosition != -1) {
-  	video_id = video_id.substring(0, ampersandPosition);
-	   }
-	   return video_id;
-     }
-
-  $("#vid1sub").click( function() {
-  	var embed_url = embed_url_template;
-  	var vid_id = get_youtube_id($("#vid1").attr("value"));
-  	var q = embed_url.supplant({id: vid_id});
-	var iframe = document.getElementById("shade");
-	iframe.src = q;
-  })
-
-    $("#vid2sub").click( function() {
-  	var embed_url = embed_url_template;
-  	var vid_id = get_youtube_id($("#vid2").attr("value"));
-  	var q = embed_url.supplant({id: vid_id});
-	var iframe = document.getElementById("shade1");
-	iframe.src = q;
-  })
-
-    $("#generateUrl").click( function () {
-      generateShareUrl();
-    })
-
-
-  function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
+        function escapeHtml(str) {
+            if (str) {
+                var div = document.createElement('div');
+                div.appendChild(document.createTextNode(str));
+                return div.innerHTML;
+            } else {
+                return null;
+            }
         }
-    }
-  };
 
-  function escapeHtml(str) {
-    if (str){
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
-  }
-  else {
-    return null;
-  }
-}  
-
-var v1 = escapeHtml(getUrlParameter("v1"));
-var v2 = escapeHtml(getUrlParameter("v2"));
-var op1 = escapeHtml(getUrlParameter("op1"));
-var op2 = escapeHtml(getUrlParameter("op2"));
-var comp1 = escapeHtml(getUrlParameter("comp1"));
-var comp2 = escapeHtml(getUrlParameter("comp2"));
-console.log(v1);
+        var v1 = escapeHtml(getUrlParameter("v1"));
+        var v2 = escapeHtml(getUrlParameter("v2"));
+        var op1 = escapeHtml(getUrlParameter("op1"));
+        var op2 = escapeHtml(getUrlParameter("op2"));
+        var comp1 = escapeHtml(getUrlParameter("comp1"));
+        var comp2 = escapeHtml(getUrlParameter("comp2"));
+        console.log(v1);
 
 
-if (v1) {
-    var embed_url = embed_url_template;
-    var vid_id = v1;
-    var q = embed_url.supplant({id: vid_id});
-    var iframe = document.getElementById("shade");
-    iframe.src = q;
-  }
+        if (v1) {
+            var embed_url = embed_url_template;
+            var vid_id = v1;
+            var q = embed_url.supplant({
+                id: vid_id
+            });
+            var iframe = document.getElementById("shade");
+            iframe.src = q;
+        }
 
-if (v2) {
-    var embed_url = embed_url_template;
-    var vid_id = v2;
-    var q = embed_url.supplant({id: vid_id});
-    var iframe = document.getElementById("shade1");
-    iframe.src = q;
-  }
+        if (v2) {
+            var embed_url = embed_url_template;
+            var vid_id = v2;
+            var q = embed_url.supplant({
+                id: vid_id
+            });
+            var iframe = document.getElementById("shade1");
+            iframe.src = q;
+        }
 
-  if (op1) {
-    $("#shade").css("opacity", op1);
-  }
+        if (op1) {
+            $("#shade").css("opacity", op1);
+        }
 
-  if (op2) {
-    $("#shade1").css("opacity", op2);
-  }
+        if (op2) {
+            $("#shade1").css("opacity", op2);
+        }
 
-  if (comp1) {
-    $("#shade").css("mix-blend-mode", comp1);
-  }
+        if (comp1) {
+            $("#shade").css("mix-blend-mode", comp1);
+        }
 
-  if (comp2) {
-    $("#shade").css("mix-blend-mode", comp2);
-  }
+        if (comp2) {
+            $("#shade").css("mix-blend-mode", comp2);
+        }
 
-function generateShareUrl(){
-  $("#shareUrl").empty();
-  var s_v1 = get_youtube_id($("#vid1").attr("value"));
-  var s_v2 = get_youtube_id($("#vid2").attr("value"));
-  var s_o1 = $("#shade").css("opacity");
-  var s_o2 = $("#shade1").css("opacity");
-  var s_c1 = $("#shade").css("mix-blend-mode");
-  var s_c2 = $("#shade1").css("mix-blend-mode");
+        function generateShareUrl() {
+            $("#shareUrl").empty();
+            var s_v1 = get_youtube_id($("#vid1").attr("value"));
+            var s_v2 = get_youtube_id($("#vid2").attr("value"));
+            var s_o1 = $("#shade").css("opacity");
+            var s_o2 = $("#shade1").css("opacity");
+            var s_c1 = $("#shade").css("mix-blend-mode");
+            var s_c2 = $("#shade1").css("mix-blend-mode");
 
-  var current_url = window.location.protocol + '//' + window.location.host + window.location.pathname
-  console.log(current_url);
+            var current_url = window.location.protocol + '//' + window.location.host + window.location.pathname
+            console.log(current_url);
 
-  var share_params = "?v1="+s_v1+"&v2="+s_v2+"&op1="+s_o1+"&op2="+s_o2+"&comp1="+s_c1+"&comp2="+s_c2;
-  var share_url = current_url+share_params;
-  console.log(share_url);
-  $("#shareUrl").append(share_url);
-  }
-
-  </script>
+            var share_params = "?v1=" + s_v1 + "&v2=" + s_v2 + "&op1=" + s_o1 + "&op2=" + s_o2 + "&comp1=" + s_c1 + "&comp2=" + s_c2;
+            var share_url = current_url + share_params;
+            console.log(share_url);
+            $("#shareUrl").append(share_url);
+        }
+    </script>
 </body>
+
 </html>
