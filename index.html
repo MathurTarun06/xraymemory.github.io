@@ -240,7 +240,7 @@ function generateShareUrl(){
   var s_c1 = $("#shade").css("mix-blend-mode");
   var s_c2 = $("#shade1").css("mix-blend-mode");
 
-  var current_url = window.location.href 
+  var current_url = window.location.protocol + '//' + window.location.host + window.location.pathname
   console.log(current_url);
 
   var share_params = "?v1="+s_v1+"&v2="+s_v2+"&op1="+s_o1+"&op2="+s_o2+"&comp1="+s_c1+"&comp2="+s_c2;
