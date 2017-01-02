@@ -234,12 +234,12 @@ if (v2) {
 
 function generateShareUrl(){
   $("#shareUrl").empty();
-  var s_v1 = get_youtube_id($("#vid1").attr("value"));
-  var s_v2 = get_youtube_id($("#vid2").attr("value"));
-  var s_o1 = $("#shade").css("opacity");
-  var s_o2 = $("#shade1").css("opacity");
-  var s_c1 = $("#shade").css("mix-blend-mode");
-  var s_c2 = $("#shade1").css("mix-blend-mode");
+  var s_v1 = escapeHtml(get_youtube_id($("#vid1").attr("value")));
+  var s_v2 = escapeHtml(get_youtube_id($("#vid2").attr("value")));
+  var s_o1 = escapeHtml($("#shade").css("opacity"));
+  var s_o2 = escapeHtml($("#shade1").css("opacity"));
+  var s_c1 = escapeHtml($("#shade").css("mix-blend-mode"));
+  var s_c2 = escapeHtml($("#shade1").css("mix-blend-mode"));
 
   var current_url = window.location.protocol + '//' + window.location.host + window.location.pathname
   console.log(current_url);
