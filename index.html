@@ -128,13 +128,11 @@ _/  _/    _/  _/_/_/    _/_/_/      _/_/_/    _/_/_/  _/  _/    _/_/
          }  
          
          const button = document.getElementById('submit');
-         
-         button.addEventListener('click', () => { // Listen on click
-         const string = document.getElementById('input').value;
-         
-         let result = findFirstNonRepeatingChar(string)
-         
-         document.getElementById('result').textContent = result; // Display in document
+        
+         button.addEventListener('click', () => {
+           const string = document.getElementById('input').value;
+           let result = findFirstNonRepeatingChar(string)
+           document.getElementById('result').textContent = result; 
          });
          
       </script>
