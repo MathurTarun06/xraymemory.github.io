@@ -1,5 +1,6 @@
 <html>
    <head>
+      <title> inspec.io - Non-Repeating Characters As A Service </title>
       <style>
          html, body {
          height: 100%;
@@ -46,43 +47,37 @@
       <div>
          <img class="center-fit" src="./bottom.png" />
       </div>
-
-
-   <script type="text/javascript">
-      const formInput = document.getElementById("input");
-      const resultElement = document.getElementById("results");
-
-      function findFirstNonRepeatingChar(inputString) {
-         if ((typeof inputString === 'string' || inputString instanceof String) && inputString != '' ) {
-         // For each char in str - grouped here as (?<char>.) - we check if it repeats using lookbehinds
-         var res = /(?<char>.)(?!.*?\k<char>)(?<!\k<char>.+?)/.exec(inputString.toLowerCase().trim())
-         if (res == null){
-            return "Our High-Alpha clusters are unable to find a non-repeating alphanumeric character."
-         }
+      <script type="text/javascript">
+         const formInput = document.getElementById("input");
+         const resultElement = document.getElementById("results");
+         
+         function findFirstNonRepeatingChar(inputString) {
+            if ((typeof inputString === 'string' || inputString instanceof String) && inputString != '' ) {
+            // For each char in str - grouped here as (?<char>.) - we check if it repeats using lookbehinds
+            var res = /(?<char>.)(?!.*?\k<char>)(?<!\k<char>.+?)/.exec(inputString.toLowerCase().trim())
+            if (res == null){
+               return "Our High-Alpha clusters are unable to find a non-repeating alphanumeric character."
+            }
+            else {
+               var char = res[0]
+               return `Our clusters have completed their processing. The first Non-Repeating Character is "${char}"`
+            }
+          }
          else {
-            var char = res[0]
-            return `Our clusters have completed their processing. The first Non-Repeating Character is "${char}"`
-         }
-       }
-      else {
-         return "Erroneous user input. Our Massive Innovation cluster demand the best."
-       }
-      }  
-      
-   const button = document.getElementById('submit');
-
-   button.addEventListener('click', () => { // Listen on click
-   const string = document.getElementById('input').value;
-     
-     if (!string) { // Don't do anything on empty input
-      return
-     }
-
-     let result = findFirstNonRepeatingChar(string)
-     
-     document.getElementById('result').textContent = result; // Display in document
-   });
-
-   </script>
-  </body>
+            return "Erroneous user input. Our Massive Innovation cluster demand the best."
+          }
+         }  
+         
+         const button = document.getElementById('submit');
+         
+         button.addEventListener('click', () => { // Listen on click
+         const string = document.getElementById('input').value;
+         
+         let result = findFirstNonRepeatingChar(string)
+         
+         document.getElementById('result').textContent = result; // Display in document
+         });
+         
+      </script>
+   </body>
 </html>
